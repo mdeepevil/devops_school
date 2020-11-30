@@ -6,7 +6,7 @@
       service:
           name: nginx
           state: started
-    - name: Disable Root Login
+    - name: Regexp line
       lineinfile:
            dest=/var/www/html/index.html
            regexp='^Welcome to nginx!'
