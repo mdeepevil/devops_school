@@ -1,0 +1,19 @@
+ARG BUILD=maven:3.5-jdk-11
+ARG RUN_IMG=tomcat:8.5-alpine
+
+## Building Stage 
+
+FROM ${BUILD} as build
+
+RUN mkdir /home/src
+
+COPY /home/app/* /home/src
+
+WORKDIR /home/src
+
+RUN mvn package
+
+## Runing stage
+FROM ${RUN_IMG}
+
+COPY --from=build /home/src/boxfuse-sample-java-war-hello/target/hello-1.0.war /usr/local/tomcat/webapps/app.war
