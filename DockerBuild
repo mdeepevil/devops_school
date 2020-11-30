@@ -1,0 +1,9 @@
+FROM ubuntu:18.04
+RUN apt-get update && apt-get install default-jdk maven git -y
+RUN mkdir /home/app
+WORKDIR /home/app
+RUN git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello
+WORKDIR /home/app/boxfuse-sample-java-war-hello
+RUN mvn package
+RUN mkdir /home/app
+RUN cp /boxfuse-sample-java-war-hello/target/hello-1.0.war /home/app/ROOT.war

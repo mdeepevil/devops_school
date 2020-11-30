@@ -1,0 +1,22 @@
+version: '3'
+services:
+  test:
+    build:
+      context: .
+      dockerfile: DockerBuild
+    container_name: Build
+    volumes:
+      - building:/home/app
+
+  production:
+    build:
+      context: .
+      dockerfile: DockerProd
+    container_name: Prod
+    ports:
+      - "80:8080"
+    volumes:
+      - building:/usr/local/tomcat/webapps/
+
+volumes:
+   building:
