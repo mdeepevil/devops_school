@@ -1,0 +1,12 @@
+---
+- name: Prepare Builder node
+  hosts: Builder
+  become: yes
+  roles:
+    - builder
+  
+- name: Prepare Production node
+  hosts: Production
+  become: yes
+  roles:
+    - production
