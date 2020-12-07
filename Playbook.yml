@@ -1,0 +1,44 @@
+---
+- name: Builder server
+  hosts: Builder
+  become: yes
+
+  tasks:
+  - name: Installing required packages
+    apt: 
+      name: {{ item }}
+      state: present
+    with_items:
+      - maven
+      - openjdk-11-jdk
+      - git
+  
+  - name: Clone project
+    git:
+      repo: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git'
+      dest: /tmp/boxfuxe
+
+  - name: Maven package command
+    shell: mvn package -f /tmp/boxfuxe/pom.xml
+
+### Production server provisioning
+
+- name: Production server
+  hosts: Production
+  become: yes
+
+  tasks:
+  - name: Installing Tomcat
+    apt:
+      name: tomcat9
+      state: present
+
+  - name: Ensure tomcat is started
+    service:
+     name: tomcat9
+     state: started
+
+  - name: Transfer .war file from Builder node to Production
+    synchronize:
+      src: /tmp/boxfuxe
+      dest: /var/lib/tomcat9/webapps
