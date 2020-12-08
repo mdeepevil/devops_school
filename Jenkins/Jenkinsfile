@@ -1,20 +1,26 @@
 pipeline {
     agent any
-
-    stage {
-        stage ('git clone') {
+    tools {
+        maven "m3"
+    }
+    stages {
+        stage('git clone'){
             steps {
-                echo 'git clone'
+                git 'https://github.com/dkgnim/test50.git'
+            }
+        }      
+    }
+    stages {
+        stage('build'){
+            steps{
+                sh 'mvn package'
             }
         }
-        stage ('build') {
+    }
+    stage {
+        stage('deploy'){
             steps{
-                echo 'build'
-            }
-        }
-        stage ('deploy') {
-            steps{
-                echo 'deploy'
+                
             }
         }
     }
