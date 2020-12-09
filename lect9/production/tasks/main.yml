@@ -1,0 +1,7 @@
+---
+- name: Installing tomcat
+  apt: name=tomcat9 state=present
+
+- name: Copy war file
+  copy: src=/tmp/hello-1.0.war dest={{apps}}
+  notify: restart tomcat9

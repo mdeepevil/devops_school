@@ -1,0 +1,3 @@
+---
+# vars file for build
+path_boxfuse: /tmp/boxfuse-sample-java-war-hello
