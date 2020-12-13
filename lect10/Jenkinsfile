@@ -5,8 +5,13 @@
          }
      }
     stages {
-        stage('git clone') {
+        stage('Clone project') {
             git 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git'
+        }
+    }
+    stages {
+        stage('Build project'){
+            
         }
     }
  }
