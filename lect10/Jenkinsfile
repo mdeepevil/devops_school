@@ -11,7 +11,12 @@
     }
     stages {
         stage('Build project'){
-            
+            sh 'mvn package -f /boxfuse/pom.xml'
+        }
+    }
+    stages {
+        stage('Build docker image and tag'){
+
         }
     }
  }
