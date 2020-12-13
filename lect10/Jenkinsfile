@@ -5,9 +5,9 @@
          }
      }
     stages {
-        stage{
+    stage{
         steps('Clone project') {
-            git 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git'
+            git 'https://github.com/mdeepevil/boxfuse-sample-java-war-hello.git'
         }
     }
     stage {
@@ -23,9 +23,19 @@
     }
     stage('Publish image to Docker Hub') {      
         steps {
-        withDockerRegistry([ credentialsId: "dockerHub", url: "" ]) {
-          sh  'docker push deepevil/boxfuseapp:latest'
+              withDockerRegistry([ credentialsId: "dockerHub", url: "" ]) {
+              sh  'docker push deepevil/boxfuseapp:latest'
         }
+    }
+    }
+    stage('Run project on Jenkins node'){
+        steps{
+            sh "docker run -d -p 8005:8080 deepevil/boxfuseapp"
+        }
+    }
+    stage('Run project on remote host'){
+        steps{
+            sh "docker -H ssh://jenkins@192.168.10.10 run -d -p 8005:8080 deepevil/boxfuseapp"
         }
     }
  }
