@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  app:
+    image: maven:3.6.3-jdk-8
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    volumes:
+      - app:/home/app/data
+    container_name: app
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: my_secret_password
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_user_pass
+    ports:
+      - "3306:3306"
+    working_dir: /var/lib/mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+  
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    restart: always
+    links:
+      - mysql
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+  
+  tomcat:
+    depends_on:
+      - app
+    image: tomcat:latest
+    volumes:
+      - app:/opt/tomcat/webapps
+    ports:
+      - "8080:8080"
+
+volumes:
+  app:
+  dbdata:
